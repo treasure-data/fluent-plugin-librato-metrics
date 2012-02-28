@@ -8,8 +8,8 @@ class LibratoMetricsOutputTest < Test::Unit::TestCase
   end
 
   CONFIG = %[
-    user test
-    token TEST
+    librato_user test
+    librato_token TEST
 
     # simple key-value metrics
     <metrics test1.**>
@@ -50,8 +50,8 @@ class LibratoMetricsOutputTest < Test::Unit::TestCase
 
   def test_configure
     d = create_driver
-    assert_equal 'test', d.instance.user
-    assert_equal 'TEST', d.instance.token
+    assert_equal 'test', d.instance.librato_user
+    assert_equal 'TEST', d.instance.librato_token
   end
 
   def test_format

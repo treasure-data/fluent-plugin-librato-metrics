@@ -25,8 +25,8 @@ class LibratoMetricsOutput < Fluent::BufferedOutput
   require "#{File.dirname(__FILE__)}/out_librato_metrics_mixin"
   include MetricsMixin
 
-  config_param :user, :string
-  config_param :token, :string
+  config_param :librato_user, :string
+  config_param :librato_token, :string
   config_param :source, :string, :default => nil
 
   def initialize
@@ -81,7 +81,7 @@ class LibratoMetricsOutput < Fluent::BufferedOutput
       {'counters'=>counters, 'gauges'=>gauges}.each_pair {|type,partitions|
         partitions.each_pair {|partitioned_time,name_aggrs|
           req = Net::HTTP::Post.new('/v1/metrics', header)
-          req.basic_auth @user, @token
+          req.basic_auth @librato_user, @librato_token
 
           params = {
             'measure_time' => partitioned_time.to_s,

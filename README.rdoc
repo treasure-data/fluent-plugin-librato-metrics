@@ -1,0 +1,51 @@
+= Librato Metrics output plugin for Fluent event collector
+
+== Overview
+
+*librato_metrics* output plugin buffers aggregate logs and upload them to Librato Metrics periodically.
+
+== Installation
+
+Simply use RubyGems:
+
+    gem install fluent-plugin-librato-metrics
+
+== Configuration
+
+    <match pattern>
+      type librato_metrics
+
+      librato_user YOUR_LIBRATO_USER_NAME
+      librato_token YOUR_LIBRATO_TOKEN
+
+      # simple key-value metrics
+      <metrics metrics.status.**>
+        name status
+        each_key key
+        value_key value
+      </metrics>
+
+      # single-stream event count
+      <metrics metrics.event.mytask>
+        name mytask.count
+      </metrics>
+
+      # single-stream event sum
+      <metrics metrics.event.mytask>
+        name mytask.size
+        value_key size
+      </metrics>
+
+      # single-stream event sum; value type is float
+      <metrics metrics.event.mytask>
+        name mytask.elapsed
+        value_key elapsed
+        type float
+      </metrics>
+
+    </match>
+
+[librato_user (required)] User name of librato metrics
+
+[librato_token (required)] Token of librato metrics
+
