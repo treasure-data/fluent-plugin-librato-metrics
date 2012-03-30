@@ -37,12 +37,24 @@ Simply use RubyGems:
       </metrics>
 
       # count with source
-      <metrics metrics.web.4xx>
+      <metrics metrics.web_event.4xx>
         name web.status_count
         source 4xx
       </metrics>
-      <metrics metrics.web.5xx>
+      <metrics metrics.web_event.5xx>
         name web.status_count
+        source 5xx
+      </metrics>
+
+      # sum with source
+      <metrics metrics.web_count>
+        name web.status_count
+        value_key 4xx_count
+        source 4xx
+      </metrics>
+      <metrics metrics.web_count>
+        name web.status_count
+        value_key 5xx_count
         source 5xx
       </metrics>
 
@@ -61,21 +73,21 @@ Simply use RubyGems:
 
 [librato_token STRING (required)] Token of librato metrics
 
-[source STRING (optional)] Default source name of metrics
+[source STRING] Default source name of metrics
 
 === <metrics> configuration
 
 [name STRING (required)] Name of this metrics
 
-[source STRING (optional)] Source name of this metrics
+[source STRING] Source name of this metrics
 
-[each_key STRING (optional)] Append 'record[each_key]' to this metrics name
+[each_key STRING] Append 'record[each_key]' to this metrics name
 
-[each_keys COMMA,SEPARATED,STRINGS (optional)] Append 'record[key].record[key].record[key]...' to this metrics name
+[each_keys COMMA,SEPARATED,STRINGS] Append 'record[key].record[key].record[key]...' to this metrics name
 
-[value_key STIRNG (optional)] Use 'record[value]' for the value of this metrics. Default is 1.
+[value_key STIRNG] Use 'record[value]' for the value of this metrics. Default is 1.
 
-[count_key STIRNG (optional)] Use 'record[value] * record[count_key]' for the value of this metrics. Default is 1.
+[count_key STIRNG] Use 'record[value] * record[count_key]' for the value of this metrics. Default is 1.
 
-[type STIRNG (optional)] 'int' or 'float'. Default is int.
+[type STIRNG] 'int' or 'float'. Default is int.
 
