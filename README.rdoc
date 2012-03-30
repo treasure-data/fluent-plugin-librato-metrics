@@ -18,34 +18,64 @@ Simply use RubyGems:
       librato_user YOUR_LIBRATO_USER_NAME
       librato_token YOUR_LIBRATO_TOKEN
 
-      # simple key-value metrics
-      <metrics metrics.status.**>
-        name status
-        each_key key
-        value_key value
-      </metrics>
-
-      # single-stream event count
+      # event count
       <metrics metrics.event.mytask>
         name mytask.count
       </metrics>
 
-      # single-stream event sum
+      # event sum
       <metrics metrics.event.mytask>
         name mytask.size
         value_key size
       </metrics>
 
-      # single-stream event sum; value type is float
+      # event sum with float type
       <metrics metrics.event.mytask>
         name mytask.elapsed
         value_key elapsed
         type float
       </metrics>
 
+      # count with source
+      <metrics metrics.web.4xx>
+        name web.status_count
+        source 4xx
+      </metrics>
+      <metrics metrics.web.5xx>
+        name web.status_count
+        source 5xx
+      </metrics>
+
+      # key-value metrics (multi-stream)
+      <metrics metrics.status.**>
+        name status  # actual name is status.$record[key]
+        each_key key
+        value_key value
+      </metrics>
+
     </match>
 
-[librato_user (required)] User name of librato metrics
+=== Global configuration
 
-[librato_token (required)] Token of librato metrics
+[librato_user STRING (required)] User name of librato metrics
+
+[librato_token STRING (required)] Token of librato metrics
+
+[source STRING (optional)] Default source name of metrics
+
+=== <metrics> configuration
+
+[name STRING (required)] Name of this metrics
+
+[source STRING (optional)] Source name of this metrics
+
+[each_key STRING (optional)] Append 'record[each_key]' to this metrics name
+
+[each_keys COMMA,SEPARATED,STRINGS (optional)] Append 'record[key].record[key].record[key]...' to this metrics name
+
+[value_key STIRNG (optional)] Use 'record[value]' for the value of this metrics. Default is 1.
+
+[count_key STIRNG (optional)] Use 'record[value] * record[count_key]' for the value of this metrics. Default is 1.
+
+[type STIRNG (optional)] 'int' or 'float'. Default is int.
 
