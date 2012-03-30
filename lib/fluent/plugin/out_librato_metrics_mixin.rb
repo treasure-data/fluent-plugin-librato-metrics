@@ -46,7 +46,7 @@ module LibratoMetricsOutput::MetricsMixin
       e.name == 'metrics'
     }.each {|e|
       defaults.each_pair {|k,v| e[k] = v if v != nil }
-      add_metrics(e, e.arg)
+      @metrics << new_metrics(e, e.arg)
     }
 
     if mk = @match_key
@@ -56,10 +56,9 @@ module LibratoMetricsOutput::MetricsMixin
     end
   end
 
-  def add_metrics(conf, pattern)
+  def new_metrics(conf, pattern)
     m = Metrics.new(pattern)
     m.configure(conf)
-    @metrics << m
   end
 
   class Data
@@ -185,17 +184,24 @@ module LibratoMetricsOutput::MetricsMixin
     def evaluate(tag, time, record)
       return nil unless @match_proc.call(tag)
 
-      data = @data
-
-      keys = data.keys = @key_proc.call(record)
+      keys = @key_proc.call(record)
       return nil unless keys
 
-      value = data.value = @value_proc.call(record)
+      value = @value_proc.call(record)
       return nil unless value
 
-      data.count = @count_proc.call(record)
+      count = @count_proc.call(record)
+
+      data = new_data
+      data.keys = keys
+      data.value = value
+      data.count = count
 
       return data
+    end
+
+    def new_data
+      Data.new(self)
     end
   end
 

@@ -36,6 +36,13 @@ class LibratoMetricsOutputTest < Test::Unit::TestCase
       value_key elapsed
       type float
     </metrics>
+
+    # single-stream event sum with source
+    <metrics test5.**>
+      name test5.stack
+      value_key count
+      source type1
+    </metrics>
   ]
 
   TIME = Time.parse("2011-01-02 13:14:15 UTC").to_i
@@ -57,23 +64,28 @@ class LibratoMetricsOutputTest < Test::Unit::TestCase
   def test_format
     d = create_driver("test1.1")
     d.emit({"key"=>"a", "value"=>10, "count"=>2}, TIME)
-    d.expect_format ["test1.a", TIME/60*60, 20].to_msgpack
+    d.expect_format ["test1.a", TIME/60*60, 20, nil].to_msgpack
     d.run
 
     d = create_driver("test2.2")
     d.emit({}, TIME)
-    d.expect_format ["test2.count", TIME/60*60, 1].to_msgpack
+    d.expect_format ["test2.count", TIME/60*60, 1, nil].to_msgpack
     d.run
 
     d = create_driver("test3.3")
     d.emit({"size"=>2100}, TIME)
-    d.expect_format ["test3.size", TIME/60*60, 2100].to_msgpack
+    d.expect_format ["test3.size", TIME/60*60, 2100, nil].to_msgpack
     d.run
 
     d = create_driver("test3.test4")
     d.emit({"size"=>2400, "elapsed"=>10.0}, TIME)
-    d.expect_format ["test3.size", TIME/60*60, 2400].to_msgpack
-    d.expect_format ["test4.elapsed", TIME/60*60, 10.0].to_msgpack
+    d.expect_format ["test3.size", TIME/60*60, 2400, nil].to_msgpack
+    d.expect_format ["test4.elapsed", TIME/60*60, 10.0, nil].to_msgpack
+    d.run
+
+    d = create_driver("test5")
+    d.emit({"count"=>12}, TIME)
+    d.expect_format ["test5.stack", TIME/60*60, 12, "type1"].to_msgpack
     d.run
   end
 
