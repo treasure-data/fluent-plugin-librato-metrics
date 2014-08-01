@@ -1,5 +1,10 @@
 = Librato Metrics output plugin for Fluent event collector
 
+== This project is no longer maintained
+
+* If you are intereted in outputting result to Librato[//www.librato.com], please check out fluent-plugin-librato[//github.com/kiyoto/fluent-plugin-librato]
+* If you are interested in MetricSense, please checkout this repo[//github.com/treasure-data/fluent-plugin-metricsense]
+
 == Overview
 
 *librato_metrics* output plugin buffers aggregate logs and upload them to Librato Metrics periodically.
